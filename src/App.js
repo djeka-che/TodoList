@@ -1,25 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+import {useState} from "react";
+import Header from "./Header";
+import Section from "./Section";
+import Main from "./Main";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [todos, setTodos] = useState([])
+    let [text, setText] = useState('');
+    {
+    }
+
+    const deleteTodo = (indexOfRemovingItem) => {
+        const filtered = todos.filter((todo, index) => {
+            return index !== indexOfRemovingItem;
+        });
+        setTodos(filtered);
+    }
+
+    const makeFavorite = (i) => {
+        const newTodos = todos.map((item, index) => {
+            if (i === index) {
+                return {
+                    ...item,
+                    favorite: !item.favorite
+                };
+            }
+            return item
+        })
+        setTodos(newTodos);
+    }
+
+    const addTodo = () => {
+        setTodos([
+            {
+                text: text,
+                favorite: false
+            },
+            ...todos
+        ]);
+        setText('')
+    }
+    return (
+        <div className="App">
+            <Header/>
+            <Section text={text} setText={setText} addTodo={addTodo}/>
+            <Main todos={todos} makeFavorite={makeFavorite} deleteTodo={deleteTodo}/>
+        </div>
+    );
+
 }
 
 export default App;
